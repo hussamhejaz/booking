@@ -83,7 +83,7 @@ function BookingPage({ showModal, handleCloseModal }) {
                     style={{ margin: '10px' }}
                     disabled={isBooked || isSelected}
                 >
-                    {time} {isBooked && "(محجوز)"}
+                    {time} {isBooked && "(محجز)"}
                 </Button>
             );
         });
