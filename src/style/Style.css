@@ -1,0 +1,149 @@
+body {
+    background-color: #eff2f5;
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .mobile-padding {
+      padding-top: 50px; /* Adjust the padding as needed */
+    }
+    .calandar{
+        margin-bottom: 50%;
+    }
+  
+  }
+
+  
+/* Calendar Container */
+/* Base styles */
+/* Base styles */
+
+.calendar-container {
+  
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calendar-header h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.calendar-header button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #15B4C2;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 5px;
+}
+
+.weekday-header {
+  font-weight: bold;
+}
+
+.calendar-day {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-day.selected {
+  background-color: #15B4C2;
+  color: white;
+}
+
+.calendar-day:hover {
+  background-color: #eaeaea;
+}
+
+.date-picker {
+  width: 200px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+.date-picker:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .calendar-container {
+    max-width: 250px;
+    margin: 0 auto;
+  }
+
+  .calendar-header h2 {
+    font-size: 18px;
+  }
+
+  .calendar-header button {
+    font-size: 16px;
+  }
+
+  .calendar-day {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .calendar-container {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .calendar-header h2 {
+    font-size: 16px;
+  }
+
+  .calendar-header button {
+    font-size: 14px;
+  }
+
+  .calendar-day {
+    padding: 6px;
+    font-size: 12px;
+  }
+}
+
+
+  
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* WhatsAppIcon.css */
+.whatsapp-icon {
+  position: fixed;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  z-index: 999; /* Ensure it's above other content */
+  
+}
+
+.whatsapp-icon img {
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+  
+}
