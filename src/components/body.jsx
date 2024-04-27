@@ -20,9 +20,10 @@ function Body({ handleButtonClick }) {
           <div className="" style={{ color: 'white' }}>
             <h2>اهلاً وسهلاً بكم في منصة حجز الموعيد</h2>
             <p>
-              منصة حجز الموعيد تتيح لكم حجز موعد في مجمع دانه التجميل الطبي مجانًا
-              نسعد بخدمتكم في مجمع دانه الطبي ونحن على اتم الاستعداد لتقدم جميع الخدمات المتاحة لدينا 
-              احجز موعدك الآن
+               دانه التجميل الطبي
+               نهتم بصحتك وجمالك
+              نخبة من الكوادر المميزة
+              احجز الان
             </p>
             <Button style={{ fontSize: '1.5rem', width: '150px', borderRadius: '10px', backgroundColor: '#14B4C2' }} onClick={handleButtonClick}>احجز الان</Button>
             <div style={{ marginTop: '10px' }}>
