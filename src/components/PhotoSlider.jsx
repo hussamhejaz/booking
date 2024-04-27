@@ -18,7 +18,7 @@ const PhotoSlider = () => {
                     return await getDownloadURL(item);
                 });
                 const urls = await Promise.all(urlsPromises);
-                console.log('Fetched photo URLs:', urls);
+                // console.log('Fetched photo URLs:', urls);
                 setPhotos(urls);
             } catch (error) {
                 console.error('Error fetching photos from storage:', error);

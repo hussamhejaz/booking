@@ -31,7 +31,7 @@ function PhotoGallery() {
       
       // Update the photos state after successful deletion
       setPhotos(photos.filter(photo => photo.name !== photoName));
-      console.log('Photo deleted successfully:', photoName);
+      // console.log('Photo deleted successfully:', photoName);
     } catch (error) {
       console.error('Error removing photo:', error);
     }
