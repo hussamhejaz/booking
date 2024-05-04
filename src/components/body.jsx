@@ -16,29 +16,32 @@ function Body({ handleButtonClick }) {
     <Container className="mobile-padding">
       <Row>
         {/* Left Column */}
-        <Col md={6} className="d-flex align-items-center ">
+        <Col md={6} className="d-flex align-items-center">
           <div className="" style={{ color: 'white' }}>
-            <h2>اهلاً وسهلاً بكم في منصة حجز الموعيد</h2>
+            {/* <h2>اهلاً وسهلاً بكم في منصة حجز الموعيد</h2> */}
             <p>
-               دانه التجميل الطبي
-               نهتم بصحتك وجمالك
+              دانه التجميل الطبي
+              نهتم بصحتك وجمالك
               نخبة من الكوادر المميزة
               احجز الان
             </p>
-            <Button style={{ fontSize: '1.5rem', width: '150px', borderRadius: '10px', backgroundColor: '#14B4C2' }} onClick={handleButtonClick}>احجز الان</Button>
-            <div style={{ marginTop: '10px' }}>
-              {/* Facebook Icon */}
-              <a href="https://www.facebook.com/danaclinic999">
-                <FaFacebook style={{ color: '#3b5998', marginRight: '10px', fontSize: '1.5rem' }} />
-              </a>
-              {/* Instagram Icon */}
-              <a href="https://www.instagram.com/danaclinic999/?igshid=OGQ5ZDc2ODk2ZA%3D%3D">
-                <FaInstagram style={{ color: '#e4405f', marginRight: '10px', fontSize: '1.5rem' }} />
-              </a>
-              {/* Snapchat Icon */}
-              <a href="https://www.snapchat.com/add/danaclinic999?invite_id=HF0VaZ66&share_id=duVhER3mTIe0vniRjqMlnA&sid=16ecd9aafac445b4a113548dfa68aa8d">
-                <FaSnapchat style={{ color: '#fffc00', fontSize: '1.5rem' }} />
-              </a>
+            <div className="d-flex flex-wrap align-items-center">
+              <Button className="mr-2 mb-2" style={{ fontSize: '1.5rem', width: '150px', borderRadius: '10px', backgroundColor: '#14B4C2' }} onClick={handleButtonClick}>احجز الان</Button>
+              {/* Social Media Icons */}
+              <div className="d-flex">
+                {/* Facebook Icon */}
+                <a href="https://www.facebook.com/danaclinic999">
+                  <FaFacebook style={{ color: '#3b5998', fontSize: '2rem', margin: '0 5px' }} />
+                </a>
+                {/* Instagram Icon */}
+                <a href="https://www.instagram.com/danaclinic999/?igshid=OGQ5ZDc2ODk2ZA%3D%3D">
+                  <FaInstagram style={{ color: '#e4405f', fontSize: '2rem', margin: '0 5px' }} />
+                </a>
+                {/* Snapchat Icon */}
+                <a href="https://www.snapchat.com/add/danaclinic999?invite_id=HF0VaZ66&share_id=duVhER3mTIe0vniRjqMlnA&sid=16ecd9aafac445b4a113548dfa68aa8d">
+                  <FaSnapchat style={{ color: '#fffc00', fontSize: '2rem', margin: '0 5px' }} />
+                </a>
+              </div>
             </div>
           </div>
         </Col>

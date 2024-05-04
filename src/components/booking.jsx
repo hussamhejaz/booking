@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Dropdown, Row, Col, Form, Alert } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ref, onValue, push, set } from "firebase/database";
 import database from '../firebase';
 import Calendar from './calandar'; // Adjust the path based on the actual location of your Calendar component
@@ -130,7 +130,7 @@ function BookingPage({ showModal, handleCloseModal }) {
             setSelectedTime(null);
             setSelectedDate(null);
             setUserInfo({ name: '', email: '', phone: '' });
-            setSuccessMessage('Booking submitted successfully!');
+            setSuccessMessage('تم حجز الموعد');
             setModalStep(1);
             setShowAlert(false);
             window.location.reload();
@@ -233,19 +233,21 @@ function BookingPage({ showModal, handleCloseModal }) {
             <Modal.Footer>
                 {modalStep !== 1 && (
                     <Button variant="primary" onClick={handleBackStep} style={{ marginRight: 'auto', marginLeft: '15px', backgroundColor: '#15B4C2' }}>
-                        <FontAwesomeIcon icon={faArrowLeft} />
+                        {/* <FontAwesomeIcon icon={faArrowLeft} /> */}
+                        رجوع
                     </Button>
                 )}
 
                 {modalStep !== 3 && (
                     <Button variant="primary" onClick={handleNextStep} style={{ backgroundColor: '#15B4C2' }} >
-                        <FontAwesomeIcon icon={faArrowRight} />
+                        {/* <FontAwesomeIcon icon={faArrowRight} /> */}
+                        التالي
                     </Button>
                 )}
 
                 {modalStep === 3 && (
                     <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
+                       اغلاق
                     </Button>
                 )}
             </Modal.Footer>
