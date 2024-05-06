@@ -36,21 +36,29 @@ function Dashboard() {
 
   // Effect to start the logout timer when component mounts or user activity changes
   useEffect(() => {
-    const newTimer = resetLogoutTimer(); // Start the logout timer when component mounts
-    const mousemoveListener = () => handleActivity(); // Define mousemove listener
-    const keydownListener = () => handleActivity(); // Define keydown listener
-    window.addEventListener('mousemove', mousemoveListener); // Add mousemove listener
-    window.addEventListener('keydown', keydownListener); // Add keydown listener
-    return () => {
-      window.removeEventListener('mousemove', mousemoveListener); // Clean up mousemove event listener
-      window.removeEventListener('keydown', keydownListener); // Clean up keydown event listener
-      clearTimeout(newTimer); // Clear the timer on unmount
-    };
-  }, [handleActivity, resetLogoutTimer]); // Include handleActivity and resetLogoutTimer in the dependency array
+    if (currentUser) {
+      const newTimer = resetLogoutTimer(); // Start the logout timer when component mounts
+      const mousemoveListener = () => handleActivity(); // Define mousemove listener
+      const keydownListener = () => handleActivity(); // Define keydown listener
+      window.addEventListener('mousemove', mousemoveListener); // Add mousemove listener
+      window.addEventListener('keydown', keydownListener); // Add keydown listener
+      return () => {
+        window.removeEventListener('mousemove', mousemoveListener); // Clean up mousemove event listener
+        window.removeEventListener('keydown', keydownListener); // Clean up keydown event listener
+        clearTimeout(newTimer); // Clear the timer on unmount
+      };
+    }
+  }, [currentUser, handleActivity, resetLogoutTimer]); // Include currentUser, handleActivity, and resetLogoutTimer in the dependency array
 
   // Redirect to login if user is not signed in
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login'); // Navigate to login page if user is not logged in
+    }
+  }, [currentUser, navigate]); // Include currentUser and navigate in the dependency array
+
+  // Render null if user is not logged in
   if (!currentUser) {
-    navigate('/login'); // Navigate to login page if user is not logged in
     return null; // Return null to prevent rendering the dashboard content
   }
 
@@ -73,7 +81,7 @@ function Dashboard() {
         <br />
         {/* Advertisement Link */}
         <Link to="/dashboard/add-advertisement" style={linkStyle}>
-        Advertisement
+          Advertisement
         </Link>
         <br />
         {/* Logout Button */}
