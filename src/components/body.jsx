@@ -23,7 +23,6 @@ function Body({ handleButtonClick }) {
               دانه التجميل الطبي
               نهتم بصحتك وجمالك
               نخبة من الكوادر المميزة
-              احجز الان
             </p>
             <div className="d-flex flex-wrap align-items-center">
               <Button className="mr-2 mb-2" style={{ fontSize: '1.5rem', width: '150px', borderRadius: '10px', backgroundColor: '#14B4C2' }} onClick={handleButtonClick}>احجز الان</Button>
