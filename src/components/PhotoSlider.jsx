@@ -53,12 +53,12 @@ const PhotoSlider = () => {
                 <Slider {...settings}>
                     {photos.map((photoUrl, index) => (
                         <div key={index}>
-                            <img src={photoUrl} alt={`Slide ${index + 1}`} style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+                            <img src={photoUrl} alt="" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
                         </div>
                     ))}
                 </Slider>
             ) : photos.length === 1 ? (
-                <img src={photos[0]} alt="Single Photo" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+                <img src={photos[0]} alt="" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
             ) : (
                 <p>No photos available.</p> // Optional: Handle case when there are no photos
             )}
