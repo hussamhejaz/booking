@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { uploadPhoto } from '../firebase'; // Ensure correct import path
+import { uploadPhoto } from '../firebase'; // Ensure the correct import path
 import PhotoGallery from './PhotoGallery';
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 function Advertisement() {
   const [file, setFile] = useState(null);
@@ -11,6 +13,7 @@ function Advertisement() {
 
   const handleUpload = async () => {
     if (!file) {
+      toast.error('No file selected'); // Show error toast if no file is selected
       console.error('No file selected');
       return;
     }
@@ -18,14 +21,16 @@ function Advertisement() {
     try {
       const downloadURL = await uploadPhoto(file);
       console.log('Photo uploaded, URL:', downloadURL);
-      // You can use the download URL as needed, such as displaying it on the UI
+      toast.success('Photo uploaded successfully!'); // Show success toast
     } catch (error) {
       console.error('Error uploading photo:', error);
+      toast.error('Error uploading photo.'); // Show error toast
     }
   };
 
   return (
     <div className="container">
+      <ToastContainer /> {/* Add ToastContainer to render toasts */}
       <h2 className="my-4">Upload Photo</h2>
       <div className="row">
         <div className="col-md-6">

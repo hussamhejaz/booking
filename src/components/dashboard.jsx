@@ -5,96 +5,89 @@ import AppointmentsTable from './AppointmentsTable';
 import AddDoctorsDepartments from './AddDoctorsDepartments';
 import DashMain from './DashMain';
 import Advertisement from './Advertisement';
+import { FaHome, FaCalendarAlt, FaPlus, FaBullhorn, FaSignOutAlt } from 'react-icons/fa'; // Import icons
 
-function Dashboard() {
-  const { currentUser } = useContext(AuthContext); // Using useContext to access AuthContext value
+const Dashboard = () => {
+  const { currentUser } = useContext(AuthContext);
   const location = useLocation();
-  const navigate = useNavigate(); // Use useNavigate hook to handle navigation
+  const navigate = useNavigate();
   const [logoutTimer, setLogoutTimer] = useState(null);
 
-  // Function to handle logout
   const handleLogout = useCallback(() => {
-    localStorage.removeItem('currentUser'); // Remove user from localStorage
-    clearTimeout(logoutTimer); // Clear the logout timer
-    navigate('/login'); // Navigate to login page
-  }, [logoutTimer, navigate]); // Include logoutTimer and navigate in the dependency array
+    localStorage.removeItem('currentUser');
+    clearTimeout(logoutTimer);
+    navigate('/login');
+  }, [logoutTimer, navigate]);
 
-  // Function to reset the logout timer
   const resetLogoutTimer = useCallback(() => {
-    clearTimeout(logoutTimer); // Clear the existing timeout
+    clearTimeout(logoutTimer);
     const newTimer = setTimeout(() => {
-      handleLogout(); // Logout user after timeout
-    }, 30 * 60 * 1000); // Timeout after 30 minutes of inactivity (30 minutes * 60 seconds * 1000 milliseconds)
-    return newTimer; // Return the new timer
-  }, [logoutTimer, handleLogout]); // Include logoutTimer and handleLogout in the dependency array
+      handleLogout();
+    }, 30 * 60 * 1000); // 30 minutes
+    return newTimer;
+  }, [logoutTimer, handleLogout]);
 
-  // Handle user activity
   const handleActivity = useCallback(() => {
-    const newTimer = resetLogoutTimer(); // Reset the logout timer on user activity
-    setLogoutTimer(newTimer); // Set the new timer
-  }, [resetLogoutTimer]); // Include resetLogoutTimer in the dependency array
+    const newTimer = resetLogoutTimer();
+    setLogoutTimer(newTimer);
+  }, [resetLogoutTimer]);
 
-  // Effect to start the logout timer when component mounts or user activity changes
   useEffect(() => {
     if (currentUser) {
-      const newTimer = resetLogoutTimer(); // Start the logout timer when component mounts
-      const mousemoveListener = () => handleActivity(); // Define mousemove listener
-      const keydownListener = () => handleActivity(); // Define keydown listener
-      window.addEventListener('mousemove', mousemoveListener); // Add mousemove listener
-      window.addEventListener('keydown', keydownListener); // Add keydown listener
+      const newTimer = resetLogoutTimer();
+      const mousemoveListener = () => handleActivity();
+      const keydownListener = () => handleActivity();
+      window.addEventListener('mousemove', mousemoveListener);
+      window.addEventListener('keydown', keydownListener);
       return () => {
-        window.removeEventListener('mousemove', mousemoveListener); // Clean up mousemove event listener
-        window.removeEventListener('keydown', keydownListener); // Clean up keydown event listener
-        clearTimeout(newTimer); // Clear the timer on unmount
+        window.removeEventListener('mousemove', mousemoveListener);
+        window.removeEventListener('keydown', keydownListener);
+        clearTimeout(newTimer);
       };
     }
-  }, [currentUser, handleActivity, resetLogoutTimer]); // Include currentUser, handleActivity, and resetLogoutTimer in the dependency array
+  }, [currentUser, handleActivity, resetLogoutTimer]);
 
-  // Redirect to login if user is not signed in
   useEffect(() => {
     if (!currentUser) {
-      navigate('/login'); // Navigate to login page if user is not logged in
+      navigate('/login');
     }
-  }, [currentUser, navigate]); // Include currentUser and navigate in the dependency array
+  }, [currentUser, navigate]);
 
-  // Render null if user is not logged in
   if (!currentUser) {
-    return null; // Return null to prevent rendering the dashboard content
+    return null;
   }
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', backgroundColor: '#f0f0f0', height: '100vh' }}>
       {/* Sidebar */}
-      <div style={{ backgroundColor: '#15B4C2', color: '#fff', width: '250px', padding: '20px', position: 'fixed', left: 0, top: 0, height: '100vh', overflowY: 'auto' }}>
-        <Link to="/dashboard" style={linkStyle}>
-          <h2 style={{ borderBottom: '2px solid #fff', paddingBottom: '10px' }}>Dashboard</h2>
-        </Link>
-        
-        {/* Links */}
-        <Link to="/dashboard/appointments" style={linkStyle}>
-          View Appointments Table
-        </Link>
-        <br />
-        <Link to="/dashboard/add-doctors-departments" style={linkStyle}>
-          Add Doctors & Departments
-        </Link>
-        <br />
-        {/* Advertisement Link */}
-        <Link to="/dashboard/add-advertisement" style={linkStyle}>
-          Advertisement
-        </Link>
-        <br />
-        {/* Logout Button */}
-        <button style={logoutButtonStyle} onClick={handleLogout}>Logout</button>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', backgroundColor: '#15B4C2', color: '#fff', width: '250px', padding: '20px', position: 'fixed', left: 0, top: 0, height: '100vh', overflowY: 'auto' }}>
+        <div>
+          <h2 style={{ borderBottom: '2px solid #fff', paddingBottom: '10px', textAlign: 'center' }}>Dashboard</h2>
+
+          {/* Links with Icons */}
+          <Link to="/dashboard" style={linkStyle}>
+            <FaHome style={iconStyle} /> Home
+          </Link>
+          <Link to="/dashboard/appointments" style={linkStyle}>
+            <FaCalendarAlt style={iconStyle} /> View Appointments
+          </Link>
+          <Link to="/dashboard/add-doctors-departments" style={linkStyle}>
+            <FaPlus style={iconStyle} /> Add Doctors & Departments
+          </Link>
+          <Link to="/dashboard/add-advertisement" style={linkStyle}>
+            <FaBullhorn style={iconStyle} /> Advertisement
+          </Link>
+        </div>
+
+        {/* Logout Button at the Bottom */}
+        <button style={logoutButtonStyle} onClick={handleLogout}>
+          <FaSignOutAlt style={{ marginRight: '8px' }} /> Logout
+        </button>
       </div>
-      
+
       {/* Main content */}
-      <div style={{ flex: 1, padding: '20px', backgroundColor: '#f0f0f0', paddingLeft: '270px' }}>
-        {location.pathname === '/dashboard' && (
-          <>
-            <DashMain/>
-          </>
-        )}
+      <div style={{ flex: 1, padding: '20px', paddingLeft: '270px' }}>
+        {location.pathname === '/dashboard' && <DashMain />}
 
         <Routes>
           <Route path="/" element={<Outlet />} />
@@ -105,13 +98,18 @@ function Dashboard() {
       </div>
     </div>
   );
-}
+};
 
 const linkStyle = {
   textDecoration: 'none',
   color: '#fff',
   marginTop: '20px',
-  display: 'block',
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const iconStyle = {
+  marginRight: '10px',
 };
 
 const logoutButtonStyle = {
@@ -121,7 +119,9 @@ const logoutButtonStyle = {
   border: 'none',
   padding: '10px',
   cursor: 'pointer',
-  borderRadius: '5px', // Add border radius for rounded corners
+  borderRadius: '5px',
+  display: 'flex',
+  alignItems: 'center',
 };
 
 export default Dashboard;

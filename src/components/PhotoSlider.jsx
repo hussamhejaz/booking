@@ -18,7 +18,6 @@ const PhotoSlider = () => {
                     return await getDownloadURL(item);
                 });
                 const urls = await Promise.all(urlsPromises);
-                // console.log('Fetched photo URLs:', urls);
                 setPhotos(urls);
             } catch (error) {
                 console.error('Error fetching photos from storage:', error);
@@ -50,13 +49,19 @@ const PhotoSlider = () => {
 
     return (
         <div style={{ maxWidth: '100%', margin: '0 auto' }}>
-            <Slider {...settings}>
-                {photos.map((photoUrl, index) => (
-                    <div key={index}>
-                        <img src={photoUrl} alt={`Slide ${index + 1}`} style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
-                    </div>
-                ))}
-            </Slider>
+            {photos.length > 1 ? (
+                <Slider {...settings}>
+                    {photos.map((photoUrl, index) => (
+                        <div key={index}>
+                            <img src={photoUrl} alt={`Slide ${index + 1}`} style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+                        </div>
+                    ))}
+                </Slider>
+            ) : photos.length === 1 ? (
+                <img src={photos[0]} alt="Single Photo" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+            ) : (
+                <p>No photos available.</p> // Optional: Handle case when there are no photos
+            )}
         </div>
     );
 };

@@ -1,15 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, push, set, remove, get, orderByChild, equalTo } from "firebase/database";
-import { getStorage,  uploadBytes, getDownloadURL,  } from 'firebase/storage';
-import {  ref as storageRef,  deleteObject } from "firebase/storage";
-import { ref as databaseRef } from "firebase/database";
+import { getDatabase, ref as databaseRef, push, set, remove, get, orderByChild, equalTo } from "firebase/database";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll, deleteObject, ref } from 'firebase/storage';  // Correctly imported 'ref' as 'storageRef' for Storage
 
- // Import getDatabase function
-
-
-
-// Your web app's Firebase configuration
+// Firebase configuration from environment variables
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -20,19 +14,18 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Create database reference
+// Create database and storage references
 const database = getDatabase(app);
-const storage = getStorage();
+const storage = getStorage(app);
 
 export { storage };
 
-// Create reference to 'departments' and 'appointments'
-export const departmentsRef = ref(database, 'departments');
-export const bookingsRef = ref(database, 'bookings');
+// Create reference to 'departments' and 'bookings' in the Realtime Database
+export const departmentsRef = databaseRef(database, 'departments');
+export const bookingsRef = databaseRef(database, 'bookings');
 
 // Export Firebase database functions
 export {
@@ -41,21 +34,23 @@ export {
   equalTo,
 };
 
-// Function to add a new department
+// Function to add a new department and return the key
 export const addDepartment = async (departmentName) => {
   try {
-    const newDepartmentRef = push(departmentsRef);
+    const newDepartmentRef = push(departmentsRef); // Create a new department reference
     await set(newDepartmentRef, { name: departmentName, doctors: [] });
+    
+    return newDepartmentRef.key; // Return the key of the new department
   } catch (error) {
     console.error("Error adding department:", error);
+    throw error; // Propagate error if needed
   }
 };
 
-// Function to add a new doctor to a department
 // Function to add a new doctor to a department with working hours
 export const addDoctorToDepartment = async (departmentId, doctorName, workingHours) => {
   try {
-    const doctorsRef = ref(database, `departments/${departmentId}/doctors`);
+    const doctorsRef = databaseRef(database, `departments/${departmentId}/doctors`);
     const newDoctorRef = push(doctorsRef);
     await set(newDoctorRef, { name: doctorName, workingHours: workingHours || [] }); // Ensure workingHours is initialized as an array
   } catch (error) {
@@ -63,11 +58,10 @@ export const addDoctorToDepartment = async (departmentId, doctorName, workingHou
   }
 };
 
-
 // Function to remove a department
 export const removeDepartment = async (departmentId) => {
   try {
-    await remove(ref(database, `departments/${departmentId}`));
+    await remove(databaseRef(database, `departments/${departmentId}`));
     console.log('Department removed successfully');
   } catch (error) {
     console.error('Error removing department:', error);
@@ -77,7 +71,7 @@ export const removeDepartment = async (departmentId) => {
 // Function to remove a doctor from a department
 export const removeDoctorFromDepartment = async (departmentId, doctorId) => {
   try {
-    await remove(ref(database, `departments/${departmentId}/doctors/${doctorId}`));
+    await remove(databaseRef(database, `departments/${departmentId}/doctors/${doctorId}`));
     console.log('Doctor removed successfully');
   } catch (error) {
     console.error('Error removing doctor:', error);
@@ -96,28 +90,46 @@ export const addAppointment = async (appointmentData) => {
   }
 };
 
-// Function to update working hours for a doctor
+
+
+export const fetchPhotos = async () => {
+  try {
+    const storage = getStorage();
+    const photosFolderRef = ref(storage, 'photos/'); // Reference to the 'photos' folder
+
+    // List all items (files) in the 'photos/' directory
+    const result = await listAll(photosFolderRef);
+
+    // Fetch download URLs for all items
+    const photoUrls = await Promise.all(result.items.map(item => getDownloadURL(item)));
+
+    return photoUrls;  // Return the array of URLs
+  } catch (error) {
+    console.error('Error fetching photos:', error); // Log the error
+    throw new Error(`Failed to fetch photos: ${error.code} - ${error.message}`);
+  }
+};
+
+
+
+
 // Function to upload a photo to Firebase Storage and save its download URL to the database
 export const uploadPhoto = async (file) => {
   try {
-    // Check if the file object is defined
     if (!file || !file.name) {
       throw new Error('Invalid file object: File name is missing');
     }
 
-    // Get a reference to the storage service
-    const storage = getStorage();
-
-    // Create a storage reference from our storage service
+    // Create a storage reference using the bucket's path `photos/` directory
     const photoStorageRef = storageRef(storage, `photos/${file.name}`);
 
-    // Upload file to Firebase Storage
+    // Upload the file
     await uploadBytes(photoStorageRef, file);
 
-    // Get download URL of the uploaded file
+    // Get the download URL of the uploaded file
     const downloadURL = await getDownloadURL(photoStorageRef);
 
-    // Now let's save the download URL to the database
+    // Save the download URL to the Realtime Database
     const photosDatabaseRef = databaseRef(database, 'photos');
     const newPhotoRef = push(photosDatabaseRef);
     await set(newPhotoRef, { url: downloadURL });
@@ -129,12 +141,10 @@ export const uploadPhoto = async (file) => {
   }
 };
 
-
-
+// Function to delete a photo from Firebase Storage
 export const deletePhoto = async (photoName) => {
   try {
-    const storage = getStorage();
-    const photoRef = ref(storage, `photos/${photoName}`);
+    const photoRef = storageRef(storage, `photos/${photoName}`);
     
     // Delete the photo
     await deleteObject(photoRef);
